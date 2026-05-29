@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { UsersService } from '../users/users.service';
@@ -22,10 +26,14 @@ export class AuthService {
     const created = await this.usersService['userModel'].create({
       username: dto.username,
       password: hashed,
-      role: 'user',
+      role: 'student',
     });
 
-    return this.signToken(created._id.toString(), created.username, created.role);
+    return this.signToken(
+      created._id.toString(),
+      created.username,
+      created.role,
+    );
   }
 
   /** لاگین و دریافت توکن */
