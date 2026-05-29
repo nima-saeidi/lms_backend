@@ -18,7 +18,7 @@ import { ProfileModule } from './profile/profile.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // این خیلی مهمه که همه‌جا قابل‌دسترسی باشه
+      isGlobal: true, 
     }),
     MongooseModule.forRoot(
       process.env.MONGO_URI || 'mongodb://localhost:27017/yourdb',

@@ -1,4 +1,3 @@
-// file: src/courses/dto/create-course.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 
 

@@ -12,7 +12,7 @@ export class Payment {
   amount: number;
 
   @Prop({ default: 'pending' })
-  status: string; // pending | paid | failed
+  status: string; 
 }
 
 export const PaymentSchema = SchemaFactory.createForClass(Payment);

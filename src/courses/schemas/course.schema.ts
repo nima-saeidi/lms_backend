@@ -1,4 +1,3 @@
-// file: src/courses/schemas/course.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
@@ -13,7 +12,7 @@ export class Course {
   code: string;
 
   @Prop({ required: true })
-  teacherId: string; // userId of teacher
+  teacherId: string;
 
   @Prop({ required: true })
   units: number;

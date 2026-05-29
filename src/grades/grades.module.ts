@@ -1,4 +1,3 @@
-// file: src/grades/grades.module.ts
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { GradesService } from './grades.service';

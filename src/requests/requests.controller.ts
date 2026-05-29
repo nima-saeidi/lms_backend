@@ -1,4 +1,3 @@
-// requests/requests.controller.ts
 import { Controller, Post, Get, Body, Param, Request, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { RequestsService } from './requests.service';
@@ -24,7 +23,6 @@ export class RequestsController {
     @Param('id') id: string,
     @Body() actionDto: { action: 'approve' | 'reject' }
   ) {
-    // req.user.role باید در مرحله لاگین/گارد به ریکوئست اضافه شده باشد
     return this.service.processRequest(id, req.user.role, actionDto.action);
   }
 }

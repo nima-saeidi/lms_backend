@@ -1,4 +1,3 @@
-// file: src/grades/schemas/grade.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 

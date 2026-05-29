@@ -1,68 +1,42 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { CoursesService } from './courses.service';
-import { CreateCourseDto } from './dto/create-course.dto';
-import { UpdateCourseDto } from './dto/update-course.dto';
-import { CourseResponseDto } from './dto/course-response.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
-import { GetUser } from '../common/decorators/get-user.decorator';
+import { Roles } from '../auth/roles.decorator';
 
-
-@ApiTags('courses')
 @Controller('api/courses')
 export class CoursesController {
-constructor(private readonly coursesService: CoursesService) {}
+  constructor(private readonly coursesService: CoursesService) {}
 
+  @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  create(@Body() dto: any) {
+    return this.coursesService.create(dto);
+  }
 
-@Post()
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles('teacher', 'admin')
-@ApiBearerAuth()
-@ApiOperation({ summary: 'ایجاد درس جدید' })
-@ApiBody({ type: CreateCourseDto })
-@ApiResponse({ status: 201, description: 'درس ایجاد شد', type: CourseResponseDto })
-create(@Body() dto: CreateCourseDto) {
-return this.coursesService.create(dto);
-}
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  findAll(@Req() req: any) {
+    return this.coursesService.findAll(req.user);
+  }
 
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.coursesService.findOne(id);
+  }
 
-@Get()
-@ApiOperation({ summary: 'فهرست دروس' })
-@ApiResponse({ status: 200, description: 'لیست دروس', type: [CourseResponseDto] })
-findAll() {
-return this.coursesService.findAll();
-}
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin', 'teacher')
+  update(@Param('id') id: string, @Body() dto: any) {
+    return this.coursesService.update(id, dto);
+  }
 
-
-@Get(':id')
-@ApiOperation({ summary: 'جزئیات یک درس' })
-@ApiResponse({ status: 200, description: 'جزئیات درس', type: CourseResponseDto })
-findOne(@Param('id') id: string) {
-return this.coursesService.findOne(id);
-}
-
-
-@Patch(':id')
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles('teacher', 'admin')
-@ApiBearerAuth()
-@ApiOperation({ summary: 'بروزرسانی درس' })
-@ApiBody({ type: UpdateCourseDto })
-@ApiResponse({ status: 200, description: 'درس بروزرسانی شد', type: CourseResponseDto })
-update(@Param('id') id: string, @Body() dto: UpdateCourseDto, @GetUser() user: any) {
-return this.coursesService.update(id, dto, user);
-}
-
-
-@Delete(':id')
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles('admin')
-@ApiBearerAuth()
-@ApiOperation({ summary: 'حذف درس' })
-@ApiResponse({ status: 200, description: 'درس حذف شد', schema: { example: { success: true } } })
-remove(@Param('id') id: string) {
-return this.coursesService.remove(id);
-}
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  remove(@Param('id') id: string) {
+    return this.coursesService.remove(id);
+  }
 }

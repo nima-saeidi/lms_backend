@@ -1,28 +1,27 @@
-// workflows/workflows.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 export class WorkflowStep {
   @Prop({ required: true })
-  stepName: string; // نام مرحله (مثلا: 'manager_approval')
+  stepName: string; 
 
   @Prop({ required: true })
-  requiredRole: string; // چه نقشی می‌تواند این مرحله را بررسی کند (مثلا: 'manager')
+  requiredRole: string;
 
   @Prop({ required: true })
-  onApprove: string; // نام مرحله بعدی در صورت تایید (یا 'completed')
+  onApprove: string; 
 
   @Prop({ required: true })
-  onReject: string; // نام مرحله بعدی در صورت رد شدن (یا 'rejected')
+  onReject: string; 
 }
 
 @Schema({ timestamps: true })
 export class WorkflowEntity extends Document {
   @Prop({ required: true, unique: true })
-  type: string; // نوع درخواست مرتبط (مثلا: 'leave')
+  type: string; 
 
   @Prop({ required: true })
-  initialStep: string; // اولین مرحله پس از ثبت درخواست
+  initialStep: string; 
 
   @Prop({ type: [WorkflowStep], required: true })
   steps: WorkflowStep[];

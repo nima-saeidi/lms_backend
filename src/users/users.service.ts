@@ -91,7 +91,6 @@ export class UsersService {
     return this.userModel.findOne({ username }).exec();
   }
 
-  // متد جدید: تغییر نقش کاربر
   async updateRole(id: string, role: string) {
     const user = await this.userModel
       .findByIdAndUpdate(id, { role }, { new: true })
@@ -109,7 +108,6 @@ export class UsersService {
     };
   }
 
-  // متد جدید: حذف کاربر
   async remove(id: string) {
     const user = await this.userModel.findByIdAndDelete(id).exec();
     if (!user) {

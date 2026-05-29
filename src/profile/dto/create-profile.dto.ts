@@ -14,5 +14,5 @@ export class CreateProfileDto {
   phone: string;
 
   @ApiProperty({ example: '64f8f1aab3e...', description: 'شناسه کاربر' })
-  userId: string; // رفرنس به User
+  userId: string;
 }

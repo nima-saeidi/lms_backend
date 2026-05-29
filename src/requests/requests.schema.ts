@@ -1,4 +1,3 @@
-// requests/requests.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { WorkflowEntity } from '../workflows/workflows.schema';
@@ -12,13 +11,13 @@ export class RequestEntity extends Document {
   type: string; 
 
   @Prop({ type: Types.ObjectId, ref: 'WorkflowEntity' })
-  workflowId: Types.ObjectId; // ارجاع به گردش کار
+  workflowId: Types.ObjectId;
 
   @Prop({ required: true })
-  currentStep: string; // مرحله فعلی در گردش کار
+  currentStep: string; 
 
   @Prop({ default: 'in_progress' })
-  status: string; // in_progress, completed, rejected
+  status: string;
 
   @Prop()
   note: string;

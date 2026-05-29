@@ -1,37 +1,40 @@
-import { Controller, Post, Get, Delete, Body, Param, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Param, UseGuards } from '@nestjs/common';
 import { EnrollmentsService } from './enrollments.service';
-import { CreateEnrollmentDto } from './dto/create-enrollment.dto';
-// فرض بر این است که گارد احراز هویت دارید
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
+import { GetUser } from '../common/decorators/get-user.decorator';
 
-@Controller('enrollments')
+@Controller('api/enrollments')
+@UseGuards(JwtAuthGuard)
 export class EnrollmentsController {
   constructor(private readonly enrollmentsService: EnrollmentsService) {}
 
-  // ثبت‌نام (دانشجو)
   @Post()
-  create(@Req() req: any, @Body() dto: CreateEnrollmentDto) {
-    const studentId = req.user.id; // گرفتن آیدی از توکن
-    return this.enrollmentsService.create(studentId, dto);
+  @Roles('student')
+  @UseGuards(RolesGuard)
+  enroll(@Body('courseId') courseId: string, @GetUser('id') studentId: string) {
+    return this.enrollmentsService.enroll(studentId, courseId);
   }
 
-  // لیست انتخاب واحدهای خودم (دانشجو)
   @Get('me')
-  findMyEnrollments(@Req() req: any) {
-    const studentId = req.user.id;
+  @Roles('student')
+  @UseGuards(RolesGuard)
+  findMyEnrollments(@GetUser('id') studentId: string) {
     return this.enrollmentsService.findMyEnrollments(studentId);
   }
 
-  // لیست کل انتخاب واحدها (ادمین)
-  // @Roles('ADMIN') -> در صورت داشتن گارد نقش‌ها
-  @Get()
-  findAll() {
-    return this.enrollmentsService.findAllEnrollments();
+  @Get('course/:courseId')
+  @Roles('teacher', 'admin')
+  @UseGuards(RolesGuard)
+  findCourseEnrollments(@Param('courseId') courseId: string) {
+    return this.enrollmentsService.findCourseEnrollments(courseId);
   }
 
-  // حذف درس (دانشجو)
   @Delete(':courseId')
-  remove(@Req() req: any, @Param('courseId') courseId: string) {
-    const studentId = req.user.id;
-    return this.enrollmentsService.remove(studentId, courseId);
+  @Roles('student')
+  @UseGuards(RolesGuard)
+  dropCourse(@Param('courseId') courseId: string, @GetUser('id') studentId: string) {
+    return this.enrollmentsService.dropCourse(studentId, courseId);
   }
 }

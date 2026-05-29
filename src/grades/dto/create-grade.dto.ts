@@ -1,4 +1,3 @@
-// file: src/grades/dto/create-grade.dto.ts
 import { ApiProperty } from '@nestjs/swagger'
 
 export class CreateGradeDto {

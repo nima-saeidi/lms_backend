@@ -1,19 +1,15 @@
-// enrollments/enrollments.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
+export type EnrollmentDocument = Enrollment & Document;
 
 @Schema({ timestamps: true })
-export class Enrollment extends Document {
-@Prop({ required: true })
-studentId: string;
+export class Enrollment {
+  @Prop({ required: true })
+  studentId: string;
 
-
-@Prop({ required: true })
-courseId: string;
+  @Prop({ required: true })
+  courseId: string;
 }
 
-
 export const EnrollmentSchema = SchemaFactory.createForClass(Enrollment);
-
-

@@ -1,41 +1,34 @@
-import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Enrollment } from './enrollments.schema';
-import { CreateEnrollmentDto } from './dto/create-enrollment.dto';
+import { Enrollment, EnrollmentDocument } from './enrollments.schema';
 
 @Injectable()
 export class EnrollmentsService {
-  constructor(
-    @InjectModel(Enrollment.name) private enrollmentModel: Model<Enrollment>,
-  ) {}
+  constructor(@InjectModel(Enrollment.name) private enrollmentModel: Model<EnrollmentDocument>) {}
 
-  async create(studentId: string, dto: CreateEnrollmentDto) {
-    const exists = await this.enrollmentModel.findOne({ studentId, courseId: dto.courseId });
-    if (exists) throw new ForbiddenException('Already enrolled');
-    return this.enrollmentModel.create({ studentId, courseId: dto.courseId });
+  async enroll(studentId: string, courseId: string) {
+    const exists = await this.enrollmentModel.findOne({ studentId, courseId }).exec();
+    if (exists) throw new BadRequestException('شما قبلاً این درس را اخذ کرده‌اید');
+
+    const created = new this.enrollmentModel({ studentId, courseId });
+    await created.save();
+    return { id: created._id.toString(), studentId, courseId };
   }
 
   async findMyEnrollments(studentId: string) {
-    return this.enrollmentModel.find({ studentId }).exec();
-  };
-
-  async findAllEnrollments() {
-    return this.enrollmentModel.find().exec();
+    const list = await this.enrollmentModel.find({ studentId }).lean().exec();
+    return list.map(e => ({ id: e._id.toString(), courseId: e.courseId }));
   }
 
+  async findCourseEnrollments(courseId: string) {
+    const list = await this.enrollmentModel.find({ courseId }).lean().exec();
+    return list.map(e => ({ id: e._id.toString(), studentId: e.studentId, courseId: e.courseId }));
+  }
 
-  // متد جدید برای حذف درس
-  async remove(studentId: string, courseId: string) {
-    const deletedEnrollment = await this.enrollmentModel.findOneAndDelete({ 
-      studentId, 
-      courseId 
-    });
-
-    if (!deletedEnrollment) {
-      throw new NotFoundException('Enrollment not found');
-    }
-
-    return { message: 'Course successfully dropped', courseId };
+  async dropCourse(studentId: string, courseId: string) {
+    const deleted = await this.enrollmentModel.findOneAndDelete({ studentId, courseId }).exec();
+    if (!deleted) throw new NotFoundException('درس مورد نظر در لیست انتخاب واحد شما یافت نشد');
+    return { success: true };
   }
 }

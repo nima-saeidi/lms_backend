@@ -1,4 +1,3 @@
-// enrollments/dto/create-enrollment.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 
 

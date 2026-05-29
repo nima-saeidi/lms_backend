@@ -37,7 +37,6 @@ export class ProfileController {
     return this.profileService.findAll();
   }
 
-  // این متد باید قبل از متد دارای پارامتر قرار بگیرد
   @Get('me')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()

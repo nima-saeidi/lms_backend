@@ -47,7 +47,7 @@ export class UsersController {
 
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
+  @Roles('admin', 'teacher') 
   @ApiBearerAuth()
   @ApiOperation({ summary: 'لیست همه کاربران (بدون پسورد)' })
   @ApiResponse({
@@ -74,7 +74,6 @@ export class UsersController {
     return this.usersService.create(dto);
   }
 
-  // روت جدید: تغییر نقش
   @Patch(':id/role')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
@@ -88,7 +87,6 @@ export class UsersController {
     return this.usersService.updateRole(id, role);
   }
 
-  // روت جدید: حذف کاربر
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
