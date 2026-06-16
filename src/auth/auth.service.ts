@@ -16,13 +16,11 @@ export class AuthService {
     private readonly jwt: JwtService,
   ) {}
 
-  /** ثبت‌نام عمومی: role همیشه 'user' */
   async register(dto: RegisterDto) {
     const exist = await this.usersService.findByUsername(dto.username);
     if (exist) throw new BadRequestException('username already exists');
 
     const hashed = await bcrypt.hash(dto.password, 10);
-    // ساخت یوزر با role = user
     const created = await this.usersService['userModel'].create({
       username: dto.username,
       password: hashed,
@@ -36,7 +34,6 @@ export class AuthService {
     );
   }
 
-  /** لاگین و دریافت توکن */
   async login(dto: LoginDto) {
     const user = await this.usersService.findByUsername(dto.username);
     if (!user) throw new UnauthorizedException('invalid credentials');
@@ -47,7 +44,6 @@ export class AuthService {
     return this.signToken(user._id.toString(), user.username, user.role);
   }
 
-  /** ساخت Access Token */
   private async signToken(sub: string, username: string, role: string) {
     const payload = { sub, username, role };
     const access_token = await this.jwt.signAsync(payload, {

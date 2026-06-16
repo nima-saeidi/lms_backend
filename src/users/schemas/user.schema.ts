@@ -16,7 +16,7 @@ password: string;
 
 
 @Prop({ required: true, default: 'user' })
-role: string; // 'user' | 'admin'
+role: string;  
 }
 
 

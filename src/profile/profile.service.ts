@@ -20,7 +20,6 @@ export class ProfileService {
   }
 
 async findByUserId(userId: string) {
-  // تبدیل به ObjectId را حذف کنید
   const profile = await this.profileModel.findOne({ userId: userId }).lean().exec();
   if (!profile) throw new NotFoundException('Profile not found');
   return profile;

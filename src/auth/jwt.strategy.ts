@@ -1,10 +1,9 @@
-// file: src/auth/jwt.strategy.ts
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 export type JwtPayload = {
-  sub: string;        // user id
+  sub: string;       
   username: string;
   role: 'user' | 'admin' | string;
 };
@@ -20,7 +19,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload) {
-    // هر چیزی که return بشه در req.user قرار می‌گیرد
     return { id: payload.sub, username: payload.username, role: payload.role };
   }
 }

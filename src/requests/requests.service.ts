@@ -25,6 +25,16 @@ export class RequestsService {
     });
   }
 
+  async findAll() {
+    // بازگرداندن همه درخواست‌ها به همراه اطلاعات نام و نام خانوادگی دانشجو
+    return this.requestModel.find().populate('studentId', 'firstName lastName').exec();
+  }
+
+  async findMyRequests(studentId: string) {
+    // بازگرداندن درخواست‌های یک دانشجوی خاص
+    return this.requestModel.find({ studentId }).exec();
+  }
+
   async processRequest(id: string, userRole: string, action: 'approve' | 'reject') {
     const req = await this.requestModel.findById(id);
     if (!req) throw new NotFoundException('درخواست یافت نشد');

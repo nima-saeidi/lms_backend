@@ -5,7 +5,7 @@ import { UpdateProfileDto } from './dto/update-profile.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)
-@Controller('api/profiles') // مسیر نهایی: /api/profiles
+@Controller('api/profiles') 
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
@@ -22,7 +22,7 @@ export class ProfileController {
     return this.profileService.create(dto);
   }
 
-  @Patch(':id') // به جای Put از Patch استفاده شد تا با فرانت‌اند هماهنگ باشد
+  @Patch(':id') 
   async updateProfile(@Param('id') id: string, @Body() dto: UpdateProfileDto) {
     return this.profileService.update(id, dto);
   }
