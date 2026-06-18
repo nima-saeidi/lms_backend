@@ -22,7 +22,7 @@ import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 
 @ApiTags('workflows')
-@Controller('workflows')
+@Controller('api/workflows')
 export class WorkflowsController {
   constructor(private readonly workflowsService: WorkflowsService) {}
 
@@ -53,17 +53,17 @@ export class WorkflowsController {
     return this.workflowsService.findAll();
   }
 
-  @Get('type/:type')
+  @Get('name/:name')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin', 'teacher', 'student')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'دریافت گردش‌کار بر اساس نوع' })
+  @ApiOperation({ summary: 'دریافت گردش‌کار بر اساس نام' })
   @ApiResponse({
     status: 200,
     description: 'اطلاعات گردش‌کار دریافتی',
   })
-  findByType(@Param('type') type: string) {
-    return this.workflowsService.findByType(type);
+  findByName(@Param('name') name: string) {
+    return this.workflowsService.findByName(name);
   }
 
   @Patch(':id')

@@ -3,25 +3,31 @@ import { Document } from 'mongoose';
 
 export class WorkflowStep {
   @Prop({ required: true })
-  stepName: string; 
+  stepId: string;
+
+  @Prop({ required: true })
+  name: string;
 
   @Prop({ required: true })
   requiredRole: string;
 
   @Prop({ required: true })
-  onApprove: string; 
+  onApprove: string;
 
   @Prop({ required: true })
-  onReject: string; 
+  onReject: string;
 }
 
 @Schema({ timestamps: true })
 export class WorkflowEntity extends Document {
   @Prop({ required: true, unique: true })
-  type: string; 
+  name: string;
+
+  @Prop()
+  description: string;
 
   @Prop({ required: true })
-  initialStep: string; 
+  initialStep: string;
 
   @Prop({ type: [WorkflowStep], required: true })
   steps: WorkflowStep[];

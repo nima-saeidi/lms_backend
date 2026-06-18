@@ -5,7 +5,6 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { CoursesModule } from './courses/courses.module';
-import { RequestsModule } from './requests/requests.module';
 import { PaymentsModule } from './payments/payments.module';
 
 import { EnrollmentsModule } from './enrollments/enrollments.module';
@@ -14,6 +13,7 @@ import { RolesGuard } from './auth/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { GradesModule } from './grades/grades.module';
 import { ProfileModule } from './profile/profile.module';
+import { WorkflowsModule } from './workflows/workflows.module';
 
 @Module({
   imports: [
@@ -27,11 +27,11 @@ import { ProfileModule } from './profile/profile.module';
     UsersModule,
     DashboardModule,
     CoursesModule,
-    RequestsModule,
     EnrollmentsModule,
     GradesModule,
     PaymentsModule,
     ProfileModule,
+    WorkflowsModule
   ],
 
 })
